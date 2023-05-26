@@ -35,6 +35,10 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public void signUp(SignUpReqVo signUpReqVo) {
+        memberRepository.findByUserIdAndDeleted(signUpReqVo.getUserId(), false).orElseThrow(() -> {
+                throw Error.of(ErrorSpec.DuplicateUserId);
+            });
+
         Member member = new Member(signUpReqVo.getUserId(), signUpReqVo.getUserPw(), Authorization.ROLE_USER, false);
         memberRepository.save(member);
     }
