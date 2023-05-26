@@ -7,6 +7,7 @@ import com.tlc.blog.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.concurrent.Callable;
 
 @RestController
@@ -17,14 +18,14 @@ public class MemberController {
 
     //로그인
     @PostMapping("/login")
-    public Callable<Response<Void>> login(@RequestBody LoginReqVo loginReqVo) {
+    public Callable<Response<Void>> login(@Valid @RequestBody LoginReqVo loginReqVo) {
         memberService.login(loginReqVo);
         return () -> Response.OK;
     }
 
     //회원가입
     @PostMapping("/signUp")
-    public Callable<Response<Void>> signUp(@RequestBody SignUpReqVo signUpReqVo) {
+    public Callable<Response<Void>> signUp(@Valid @RequestBody SignUpReqVo signUpReqVo) {
         memberService.signUp(signUpReqVo);
         return () -> Response.OK;
     }
