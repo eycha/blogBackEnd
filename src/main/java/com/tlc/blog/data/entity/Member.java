@@ -22,10 +22,14 @@ public class Member extends BaseTimeEntity {
 
     private String userName;
 
+    @Enumerated(EnumType.STRING)
     private Authorization authorization;
 
     private boolean deleted;
 
     @OneToMany(mappedBy = "member")
     private List<Post> posts;
+
+    @OneToMany(mappedBy = "member")
+    private List<GuestBook> guestBooks;
 }
