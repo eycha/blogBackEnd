@@ -30,4 +30,11 @@ public class Member extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "member")
     private List<GuestBook> guestBooks;
+
+    public Member(String userId, String userPw, Authorization authorization, boolean deleted) {
+        this.userId = userId;
+        this.userPw = userPw;
+        this.authorization = authorization;
+        this.deleted = deleted;
+    }
 }
