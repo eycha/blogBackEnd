@@ -1,0 +1,74 @@
+server:
+  port: 8080
+  error:
+    whitelabel:
+      enabled: false
+  shutdown: graceful
+  tomcat:
+    connection-timeout: 30000
+
+spring:
+  application:
+    name: blog
+    desc: 'tlc_blog'
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
+  datasource:
+    url: jdbc:mysql://localhost:3306/tlc_blog?autoReconnect=true&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=Asia/Seoul&cacheDefaultTimeZone=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: admin
+    password: "yeonho5376!"
+    hikari:
+      maximum-pool-size: 5
+      maxLifeTime: 60000
+  jpa:
+    hibernate:
+      ddl-auto: validate
+      #      naming:
+      #        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    generate-ddl: true
+    show-sql: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    #    properties:
+    #      hibernate:
+    #        jdbc:
+    #          time_zone=UTC
+    open-in-view: false
+  output:
+    ansi:
+      enabled: always
+
+logging:
+  level:
+    ROOT: info
+    org:
+      springframework:
+        web: error
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+    resolve-schema-properties: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  swagger-ui:
+    operations-sorter: alpha
+    tags-sorter: alpha
+    path: /swagger-ui.html
+    url: ${SERVICE_PATH:}/v3/api-docs # swagger api doc url
+    config-url: ${SERVICE_PATH:}/v3/api-docs/swagger-config # swagger config url
+    disable-swagger-default-url: true
+    display-query-params-without-oauth2: true
+    show-common-extensions: true
+    use-fqn: true
+
+management:
+  endpoints:
+    web:
+      cors:
+        allowed-origins: http://localhost:4000,*
