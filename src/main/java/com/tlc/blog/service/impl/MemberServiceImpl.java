@@ -5,6 +5,7 @@ import com.tlc.blog.data.enumerate.Authorization;
 import com.tlc.blog.data.repository.MemberRepository;
 import com.tlc.blog.data.vo.LoginReqVo;
 import com.tlc.blog.data.vo.SignUpReqVo;
+import com.tlc.blog.data.vo.response.LoginResVo;
 import com.tlc.blog.error.Error;
 import com.tlc.blog.error.ErrorSpec;
 import com.tlc.blog.service.MemberService;
@@ -21,12 +22,14 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional(readOnly = true)
     @Override
-    public void login(LoginReqVo loginReqVo) {
+    public LoginResVo login(LoginReqVo loginReqVo) {
         Member member = memberRepository.findByUserIdAndUserPwAndDeleted(loginReqVo.getUserId(), loginReqVo.getUserPw(), false)
                 .orElseThrow(() -> {
                     throw Error.of(ErrorSpec.LoginFailed);
                 });
         log.info("id: {}, userId: {}님 로그인 성공", member.getId(), member.getUserId());
+
+        return new LoginResVo(member.getId(), member.getAuthorization());
     }
 
     @Transactional

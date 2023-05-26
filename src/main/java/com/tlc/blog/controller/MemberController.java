@@ -2,6 +2,7 @@ package com.tlc.blog.controller;
 
 import com.tlc.blog.data.vo.LoginReqVo;
 import com.tlc.blog.data.vo.SignUpReqVo;
+import com.tlc.blog.data.vo.response.LoginResVo;
 import com.tlc.blog.response.Response;
 import com.tlc.blog.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +19,8 @@ public class MemberController {
 
     //로그인
     @PostMapping("/login")
-    public Callable<Response<Void>> login(@Valid @RequestBody LoginReqVo loginReqVo) {
-        memberService.login(loginReqVo);
-        return () -> Response.OK;
+    public Callable<Response<LoginResVo>> login(@Valid @RequestBody LoginReqVo loginReqVo) {
+        return () -> Response.of(memberService.login(loginReqVo));
     }
 
     //회원가입
