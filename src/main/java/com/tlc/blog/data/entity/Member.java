@@ -20,8 +20,6 @@ public class Member extends BaseTimeEntity {
 
     private String userPw;
 
-    private String userName;
-
     @Enumerated(EnumType.STRING)
     private Authorization authorization;
 
