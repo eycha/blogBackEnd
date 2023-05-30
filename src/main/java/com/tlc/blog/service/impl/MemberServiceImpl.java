@@ -11,6 +11,7 @@ import com.tlc.blog.error.ErrorSpec;
 import com.tlc.blog.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,9 +36,9 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public void signUp(SignUpReqVo signUpReqVo) {
-        memberRepository.findByUserIdAndDeleted(signUpReqVo.getUserId(), false).orElseThrow(() -> {
-                throw Error.of(ErrorSpec.DuplicateUserId);
-            });
+        if(ObjectUtils.isNotEmpty(memberRepository.findByUserIdAndDeleted(signUpReqVo.getUserId(), false))) {
+            throw Error.of(ErrorSpec.DuplicateUserId);
+        }
 
         Member member = new Member(signUpReqVo.getUserId(), signUpReqVo.getUserPw(), Authorization.ROLE_USER, false);
         memberRepository.save(member);
