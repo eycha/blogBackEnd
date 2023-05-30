@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 @RestControllerAdvice
@@ -25,6 +26,14 @@ public class ErrorHandler {
         final BaseCodeException notFoundException = Error.of(ErrorSpec.NotFoundError);
         final ErrorVO error = ErrorVO.of(notFoundException);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(MultipartException.class)
+    public ResponseEntity<ErrorVO> handleMultipartException(MultipartException exception) {
+        print("Multipart ErrorHandler: ", exception);
+        final BaseCodeException multipartException = Error.of(ErrorSpec.MultipartError);
+        final ErrorVO error = ErrorVO.of(multipartException);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     @ExceptionHandler(Exception.class)
