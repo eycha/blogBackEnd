@@ -24,4 +24,24 @@ public class Post extends BaseTimeEntity {
     private String imagePath;
 
     private boolean deleted;
+
+    public Post(String title, String content, Member member, boolean deleted) {
+        this.title = title;
+        this.content = content;
+        this.member = member;
+        this.deleted = deleted;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    public void setContent(String content) {
+        this.content = content;
+    }
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 }

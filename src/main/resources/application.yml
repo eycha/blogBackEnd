@@ -72,3 +72,7 @@ management:
     web:
       cors:
         allowed-origins: http://localhost:4000,*
+
+blog:
+  image:
+    base-path: images

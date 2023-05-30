@@ -11,7 +11,7 @@ import static org.springframework.http.HttpStatus.*;
 public enum ErrorSpec {
     LoginFailed(UNAUTHORIZED, "일치하는 아이디나 비밀번호가 없습니다."),
     NotFoundError(NOT_FOUND, "존재하지 않는 API 입니다."),
-
+    NoAuthorization(UNAUTHORIZED, "해당 사용자는 권한이 없습니다."),
     NotFoundMember(NOT_FOUND, "해당 회원이 존재하지 않습니다."),
     DuplicateUserId(CONFLICT, "이미 존재하는 아이디 입니다."),
     NotFoundPost(NOT_FOUND, "존재하지 않는 게시글 입니다."),
