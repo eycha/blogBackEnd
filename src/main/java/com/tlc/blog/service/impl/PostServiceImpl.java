@@ -34,14 +34,8 @@ public class PostServiceImpl implements PostService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<PostListResVo> list(Pageable pageable) {
-        List<PostListResVo> posts = new ArrayList<>();
-        postRepository.findByDeleted(false, pageable).forEach(post ->
-                posts.add(new PostListResVo(post.getId(), post.getTitle(), post.getContent(),
-                        post.getImagePath(), post.getMember().getId()))
-        );
-
-        return posts;
+    public PostListResVo list(Pageable pageable) {
+        return new PostListResVo(postRepository.findByDeleted(false, pageable));
     }
 
     @Transactional(readOnly = true)
@@ -56,19 +50,13 @@ public class PostServiceImpl implements PostService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<PostListResVo> search(String keyword, Pageable pageable) {
-        List<PostListResVo> posts = new ArrayList<>();
-        postRepository.findByDeletedAndTitleContaining(false, keyword, pageable).forEach(post ->
-                posts.add(new PostListResVo(post.getId(), post.getTitle(), post.getContent(),
-                        post.getImagePath(), post.getMember().getId()))
-        );
-
-        return posts;
+    public PostListResVo search(String keyword, Pageable pageable) {
+        return new PostListResVo(postRepository.findByDeletedAndTitleContaining(false, keyword, pageable));
     }
 
     @Transactional
     @Override
-    public List<PostListResVo> add(Long memberId, PostAddReqVo postAddReqVo, MultipartFile image, Pageable pageable) {
+    public PostListResVo add(Long memberId, PostAddReqVo postAddReqVo, MultipartFile image, Pageable pageable) {
         Member member = memberRepository.findByIdAndDeleted(memberId, false).orElseThrow(() -> {
                     throw Error.of(ErrorSpec.NotFoundMember);
                 });
@@ -98,7 +86,7 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public List<PostListResVo> update(Long memberId, Long postId, PostUpdateReqVo postUpdateReqVo, MultipartFile image, Pageable pageable) {
+    public PostListResVo update(Long memberId, Long postId, PostUpdateReqVo postUpdateReqVo, MultipartFile image, Pageable pageable) {
         Member member = memberRepository.findByIdAndDeleted(memberId, false).orElseThrow(() -> {
                     throw Error.of(ErrorSpec.NotFoundMember);
                 });

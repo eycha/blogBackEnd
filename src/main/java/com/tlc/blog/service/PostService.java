@@ -10,10 +10,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface PostService {
-    List<PostListResVo> list(Pageable pageable);
+    PostListResVo list(Pageable pageable);
     PostDetailResVo detail(Long postId);
-    List<PostListResVo> search(String keyword, Pageable pageable);
-    List<PostListResVo> add(Long memberId, PostAddReqVo postAddReqVo, MultipartFile image, Pageable pageable);
-    List<PostListResVo> update(Long memberId, Long postId, PostUpdateReqVo postUpdateReqVo, MultipartFile image, Pageable pageable);
+    PostListResVo search(String keyword, Pageable pageable);
+    PostListResVo add(Long memberId, PostAddReqVo postAddReqVo, MultipartFile image, Pageable pageable);
+    PostListResVo update(Long memberId, Long postId, PostUpdateReqVo postUpdateReqVo, MultipartFile image, Pageable pageable);
     void delete(Long memberId, Long postId);
 }

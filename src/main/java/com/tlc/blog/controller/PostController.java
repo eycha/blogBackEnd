@@ -6,6 +6,7 @@ import com.tlc.blog.data.vo.response.PostDetailResVo;
 import com.tlc.blog.data.vo.response.PostListResVo;
 import com.tlc.blog.response.Response;
 import com.tlc.blog.service.PostService;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +23,8 @@ public class PostController {
     private final PostService postService;
     //게시글 목록 조회
     @GetMapping("")
-    public Callable<Response<List<PostListResVo>>> list(
-            @RequestParam Pageable pageable
+    public Callable<Response<PostListResVo>> list(
+            @Parameter Pageable pageable
     ) {
         return () -> Response.of(postService.list(pageable));
     }
@@ -38,32 +39,32 @@ public class PostController {
 
     //게시글 검색
     @GetMapping("/search")
-    public Callable<Response<List<PostListResVo>>> search(
+    public Callable<Response<PostListResVo>> search(
             @RequestParam(required = false) String keyword,
-            @RequestParam Pageable pageable
+            @Parameter Pageable pageable
     ) {
         return () -> Response.of(postService.search(keyword, pageable));
     }
 
     //게시글 등록
     @PostMapping("")
-    public Callable<Response<List<PostListResVo>>> add(
+    public Callable<Response<PostListResVo>> add(
             @RequestHeader Long memberId,
             @Valid @RequestPart PostAddReqVo postAddReqVo,
             @RequestPart(required = false) MultipartFile image,
-            Pageable pageable
+            @Parameter Pageable pageable
     ) {
         return () -> Response.of(postService.add(memberId, postAddReqVo, image, pageable));
     }
 
     //게시글 수정
     @PutMapping("/{id}")
-    public Callable<Response<List<PostListResVo>>> update(
+    public Callable<Response<PostListResVo>> update(
             @RequestHeader Long memberId,
             @Valid @RequestPart PostUpdateReqVo postUpdateReqVo,
             @RequestPart(required = false) MultipartFile image,
             @PathVariable Long postId,
-            Pageable pageable
+            @Parameter Pageable pageable
     ) {
         return () -> Response.of(postService.update(memberId, postId, postUpdateReqVo, image, pageable));
     }
