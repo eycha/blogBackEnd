@@ -20,4 +20,17 @@ public class GuestBook extends BaseTimeEntity {
     private String content;
 
     private boolean deleted;
+
+    public GuestBook(Member member, String content, boolean deleted) {
+        this.member = member;
+        this.content = content;
+        this.deleted = deleted;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 }

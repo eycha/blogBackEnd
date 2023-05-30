@@ -16,8 +16,8 @@ public enum ErrorSpec {
     DuplicateUserId(CONFLICT, "이미 존재하는 아이디 입니다."),
     NotFoundPost(NOT_FOUND, "존재하지 않는 게시글 입니다."),
     SaveImageError(INTERNAL_SERVER_ERROR, "이미지 저장에 실패하였습니다."),
-    MultipartError(BAD_REQUEST, "파일 업로드에 실패하였습니다.(파일 용량 초과)"),;
-
+    MultipartError(BAD_REQUEST, "파일 업로드에 실패하였습니다.(파일 용량 초과)"),
+    NotFoundGuestBook(NOT_FOUND, "존재하지 않는 방명록입니다."),;
 
     private final HttpStatus httpStatus;
     private final String message;

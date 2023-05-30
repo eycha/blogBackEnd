@@ -45,20 +45,22 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public MemberListResVo list(Long memberId) {
         Member member = memberRepository.findByIdAndDeleted(memberId, false).orElseThrow(() -> Error.of(ErrorSpec.NotFoundMember));
 
-        if (!member.getAuthorization().equals(ROLE_USER)) throw Error.of(ErrorSpec.NoAuthorization);
+        if (!member.getAuthorization().equals(Authorization.ROLE_ADMIN)) throw Error.of(ErrorSpec.NoAuthorization);
         List<Member> memberList = memberRepository.findByDeleted(false);
 
         return new MemberListResVo(memberList);
     }
 
     @Override
+    @Transactional
     public void delete(Long memberId, Long deleteMemberId) {
         Member member = memberRepository.findByIdAndDeleted(memberId, false).orElseThrow(() -> Error.of(ErrorSpec.NotFoundMember));
         
-        if (!member.getAuthorization().equals(ROLE_USER)) throw Error.of(ErrorSpec.NoAuthorization);
+        if (!member.getAuthorization().equals(Authorization.ROLE_ADMIN)) throw Error.of(ErrorSpec.NoAuthorization);
         Member deleteMember = memberRepository.findByIdAndDeleted(deleteMemberId, false).orElseThrow(() -> Error.of(ErrorSpec.NotFoundMember));
         deleteMember.setDeleted(true);
     }
