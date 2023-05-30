@@ -37,4 +37,7 @@ public class Member extends BaseTimeEntity {
         this.authorization = authorization;
         this.deleted = deleted;
     }
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 }

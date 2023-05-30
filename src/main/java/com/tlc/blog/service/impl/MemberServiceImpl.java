@@ -6,14 +6,18 @@ import com.tlc.blog.data.repository.MemberRepository;
 import com.tlc.blog.data.vo.LoginReqVo;
 import com.tlc.blog.data.vo.SignUpReqVo;
 import com.tlc.blog.data.vo.response.LoginResVo;
+import com.tlc.blog.data.vo.response.MemberListResVo;
 import com.tlc.blog.error.Error;
 import com.tlc.blog.error.ErrorSpec;
 import com.tlc.blog.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+import static com.tlc.blog.data.enumerate.Authorization.ROLE_USER;
 
 @Service
 @Slf4j
@@ -25,9 +29,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public LoginResVo login(LoginReqVo loginReqVo) {
         Member member = memberRepository.findByUserIdAndUserPwAndDeleted(loginReqVo.getUserId(), loginReqVo.getUserPw(), false)
-                .orElseThrow(() -> {
-                    throw Error.of(ErrorSpec.LoginFailed);
-                });
+                .orElseThrow(() -> Error.of(ErrorSpec.LoginFailed));
         log.info("id: {}, userId: {}님 로그인 성공", member.getId(), member.getUserId());
 
         return new LoginResVo(member.getId(), member.getAuthorization());
@@ -36,21 +38,28 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public void signUp(SignUpReqVo signUpReqVo) {
-        if(ObjectUtils.isNotEmpty(memberRepository.findByUserIdAndDeleted(signUpReqVo.getUserId(), false))) {
-            throw Error.of(ErrorSpec.DuplicateUserId);
-        }
+        memberRepository.findByUserIdAndDeleted(signUpReqVo.getUserId(), false).orElseThrow(() -> Error.of(ErrorSpec.DuplicateUserId));
 
         Member member = new Member(signUpReqVo.getUserId(), signUpReqVo.getUserPw(), Authorization.ROLE_USER, false);
         memberRepository.save(member);
     }
 
     @Override
-    public void list() {
+    public MemberListResVo list(Long memberId) {
+        Member member = memberRepository.findByIdAndDeleted(memberId, false).orElseThrow(() -> Error.of(ErrorSpec.NotFoundMember));
 
+        if (!member.getAuthorization().equals(ROLE_USER)) throw Error.of(ErrorSpec.NoAuthorization);
+        List<Member> memberList = memberRepository.findByDeleted(false);
+
+        return new MemberListResVo(memberList);
     }
 
     @Override
-    public void delete() {
-
+    public void delete(Long memberId, Long deleteMemberId) {
+        Member member = memberRepository.findByIdAndDeleted(memberId, false).orElseThrow(() -> Error.of(ErrorSpec.NotFoundMember));
+        
+        if (!member.getAuthorization().equals(ROLE_USER)) throw Error.of(ErrorSpec.NoAuthorization);
+        Member deleteMember = memberRepository.findByIdAndDeleted(deleteMemberId, false).orElseThrow(() -> Error.of(ErrorSpec.NotFoundMember));
+        deleteMember.setDeleted(true);
     }
 }
